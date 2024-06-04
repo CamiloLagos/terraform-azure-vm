@@ -1,10 +1,8 @@
 variable "tags" {}
 variable "resource_group" {}
-variable "interface_id" {}
 variable "location" {}
 variable "disks" {
   type = map(object({
-    name          = string
     storage_type  = string
     caching       = string
     create_option = string
@@ -32,7 +30,6 @@ variable "disks" {
 ####################################################################
 
 variable "ambiente" {}
-variable "workspace" {}
 variable "correlativo_vm" {
     type = string
     description = "Numero de 2 digitos consecutivos de acuerdo con la cantidad de servidores que posea un proyecto de acuerdo con su sistema operativo, proposito y ambiente"
@@ -55,11 +52,22 @@ variable "size_vm" {
   description = "El tamaño de la máquina virtual. Esta variable determina la capacidad de recursos, como la cantidad de CPU, memoria y almacenamiento, que tendrá la máquina virtual. Consulte la documentación para conocer los tamaños de VM disponibles y sus características."
 }
 
-variable "ope_system" {
-  type = string
-  description = "Ingrese el sistema operativo de la maquina virtual"
+variable "create_interface_network" {
+  type = bool
+  description = "Especificar en true o false si se deberia crear una interfaz de red"
+  default = true
 }
 
+variable "subnet_id" {
+  type = any
+  description = "Ingresar el ID de la subnet a la cual se le creara una interfaz de red (Requerido si create_interface_network=true)"
+  default = null
+}
+
+variable "interface_id" {
+  description = "Ingresar el ID de la interfaz de red para la vm"
+  default = null
+}
 
 variable "allow_extension" {
   type        = bool

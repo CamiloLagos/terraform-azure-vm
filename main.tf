@@ -1,4 +1,22 @@
 ####################################################################
+# Network Interface 
+####################################################################
+
+resource "azurerm_network_interface" "network_interface" {
+  count = var.zones.create_interface_network ? 1 : 0
+  name                = "NIC-${var.correlativo_vm}-${var.proyecto}-${var.ambiente}"
+  location            = var.location
+  resource_group_name = var.resource_group
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = var.subnet_id
+    private_ip_address_allocation = "Dynamic"
+  }
+  tags = var.tags
+}
+
+####################################################################
 # Availability set
 ####################################################################
 
@@ -13,6 +31,7 @@ resource "azurerm_availability_set" "aset_1" {
 }
 
 locals {
+
 }
 
 
@@ -21,20 +40,21 @@ locals {
 ####################################################################
 ##############      vm01      ############## 
 resource "azurerm_linux_virtual_machine" "vm01" {
-  name                  = "LBAZ${var.proyecto_abre}${var.workspace}${var.proposito}${var.correlativo_vm}" #Maximo 14 caracteres
+  name                  = "LBAZ${var.proyecto_abre}${var.ambiente}${var.proposito}${var.correlativo_vm}" #Maximo 14 caracteres
   resource_group_name   = var.resource_group
   location              = var.location 
   availability_set_id   = var.zones.create_availability_set ? azurerm_availability_set.aset_1[0].id  : var.zones.configuration.availability_set_id #Comentado por la habilitacion de las zonas de disponibilidad
   size                  = var.size_vm
   admin_username        = var.admin_username
   allow_extension_operations = var.allow_extension
-  network_interface_ids = [var.interface_id]
+  network_interface_ids = [ var.create_interface_network ? azurerm_network_interface.network_interface[0].id : var.interface_id ]
   zone = var.zones.configuration.zone
 
   admin_ssh_key {
     username   = var.admin_username
     public_key = file("./${var.public_key_pub}")
   }
+
   source_image_reference {
     publisher = var.source_image.publisher
     offer     = var.source_image.offer

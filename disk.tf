@@ -1,7 +1,7 @@
 resource "azurerm_managed_disk" "managed_disk" {
   for_each = var.disks
 
-  name                 = "LBAZ${var.proyecto_abre}${var.workspace}${var.proposito}${var.correlativo_vm}-data${each.value}"
+  name                 = "LBAZ${var.proyecto_abre}${var.ambiente}${var.proposito}${var.correlativo_vm}-data${each.value}"
   location             = var.location
   resource_group_name  = var.resource_group
   storage_account_type = each.value["storage_type"]
