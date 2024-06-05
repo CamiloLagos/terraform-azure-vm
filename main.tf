@@ -3,7 +3,7 @@
 ####################################################################
 
 resource "azurerm_network_interface" "network_interface" {
-  count = var.zones.create_interface_network ? 1 : 0
+  count = var.create_interface_network ? 1 : 0
   name                = "NIC-${var.correlativo_vm}-${var.proyecto}-${var.ambiente}"
   location            = var.location
   resource_group_name = var.resource_group
@@ -40,7 +40,7 @@ locals {
 ####################################################################
 ##############      vm01      ############## 
 resource "azurerm_linux_virtual_machine" "vm01" {
-  name                  = "LBAZ${var.proyecto_abre}${var.ambiente}${var.proposito}${var.correlativo_vm}" #Maximo 14 caracteres
+  name                  = upper("LBAZ${var.proyecto_abre}${var.ambiente}${var.proposito}${var.correlativo_vm}") #Maximo 14 caracteres
   resource_group_name   = var.resource_group
   location              = var.location 
   availability_set_id   = var.zones.create_availability_set ? azurerm_availability_set.aset_1[0].id  : var.zones.configuration.availability_set_id #Comentado por la habilitacion de las zonas de disponibilidad
