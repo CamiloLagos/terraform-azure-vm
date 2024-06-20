@@ -84,6 +84,7 @@ variable "admin_username" {
 variable "public_key_pub" {
   type        = string
   description = "El nombre de la llave pública que se utilizará para permitir el acceso a la máquina virtual a través de SSH. Asegúrese de proporcionar el nombre correcto de la llave pública que corresponde a la clave privada autorizada para acceder a la VM."
+  sensitive = true
 }
 
 
@@ -139,6 +140,19 @@ variable "zones" {
     condition = var.zones.create_availability_set == true ? var.zones.configuration.zone == null && var.zones.configuration.availability_set_id == null : var.zones.configuration.zone != null ? var.zones.configuration.availability_set_id == null : var.zones.configuration.availability_set_id != null
     error_message = "Si se va a crear un conjunto de disponibilidad (create_availability_set is true), las variables zone y availability_set deben ser nulas." 
   }
+}
+
+variable "disable_password_authentication" {
+  type = bool
+  description = "Deshabilitar la autenticación por contraseña."
+  default = true
+}
+
+
+variable "enable_ip_forwarding" {
+  type = bool
+  description = "Habilitar el reenvío de IP. Establecer esto en 'true' permite que el Sistema Operativo actue como enrutador"
+  default = false
 }
 
 

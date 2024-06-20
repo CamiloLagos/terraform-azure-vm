@@ -8,6 +8,8 @@ resource "azurerm_network_interface" "network_interface" {
   location            = var.location
   resource_group_name = var.resource_group
 
+  enable_ip_forwarding = var.enable_ip_forwarding
+
   ip_configuration {
     name                          = "internal"
     subnet_id                     = var.subnet_id
@@ -45,10 +47,14 @@ resource "azurerm_linux_virtual_machine" "vm01" {
   location              = var.location 
   availability_set_id   = var.zones.create_availability_set ? azurerm_availability_set.aset_1[0].id  : var.zones.configuration.availability_set_id #Comentado por la habilitacion de las zonas de disponibilidad
   size                  = var.size_vm
+
   admin_username        = var.admin_username
+  disable_password_authentication = var.disable_password_authentication
+
   allow_extension_operations = var.allow_extension
-  network_interface_ids = [ var.create_interface_network ? azurerm_network_interface.network_interface[0].id : var.interface_id ]
   zone = var.zones.configuration.zone
+
+  network_interface_ids = [ var.create_interface_network ? azurerm_network_interface.network_interface[0].id : var.interface_id ]
 
   admin_ssh_key {
     username   = var.admin_username
