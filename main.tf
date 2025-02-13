@@ -8,7 +8,7 @@ resource "azurerm_network_interface" "network_interface" {
   location            = var.location
   resource_group_name = var.resource_group
 
-  enable_ip_forwarding = var.enable_ip_forwarding
+  ip_forwarding_enabled = var.enable_ip_forwarding
 
   ip_configuration {
     name                          = "internal"
