@@ -148,6 +148,21 @@ variable "disable_password_authentication" {
   default = true
 }
 
+variable "admin_password" {
+  type = string
+  description = "La contraseña del administrador para la máquina virtual. Esta contraseña se utilizará para acceder y administrar la máquina virtual mediante RDP. Asegúrese de proporcionar una contraseña segura y fácil de recordar."
+  sensitive = true
+}
+
+variable "os" {
+  type = string
+  description = "El sistema operativo que se utilizará para la máquina virtual. Los valores válidos son 'Linux' o 'Windows'."
+  validation {
+    condition = var.os == "Linux" || var.os == "Windows"
+    error_message = "El sistema operativo debe ser 'Linux' o 'Windows'."
+  }
+}
+
 
 variable "enable_ip_forwarding" {
   type = bool

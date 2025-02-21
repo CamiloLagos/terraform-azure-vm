@@ -42,6 +42,7 @@ locals {
 ####################################################################
 ##############      vm01      ############## 
 resource "azurerm_linux_virtual_machine" "vm01" {
+  count = var.os == "linux" ? 1 : 0
   name                  = upper("LBAZ${var.proyecto_abre}${var.ambiente}${var.proposito}${var.correlativo_vm}") #Maximo 14 caracteres
   resource_group_name   = var.resource_group
   location              = var.location 
@@ -61,6 +62,34 @@ resource "azurerm_linux_virtual_machine" "vm01" {
     public_key = file("./${var.public_key_pub}")
   }
 
+
+
+  os_disk {
+    caching              = var.os_disk.caching
+    storage_account_type = var.os_disk.storage_account_type
+    disk_size_gb         = var.os_disk.disk_size_gb
+  }
+
+
+  tags = var.tags
+}
+
+resource "azurerm_windows_virtual_machine" "example" {
+  count               = var.os == "windows" ? 1 : 0
+
+  name                = upper("SBAZ${var.proyecto_abre}${var.ambiente}${var.proposito}${var.correlativo_vm}")
+  resource_group_name = var.resource_group
+  location            = var.location
+  size                = var.size_vm
+  admin_username      = var.admin_username
+  admin_password      = var.admin_password
+
+  availability_set_id = var.zones.create_availability_set ? azurerm_availability_set.aset_1[0].id  : var.zones.configuration.availability_set_id
+
+  network_interface_ids = [
+    azurerm_network_interface.example.id,
+  ]
+
   source_image_reference {
     publisher = var.source_image.publisher
     offer     = var.source_image.offer
@@ -73,7 +102,6 @@ resource "azurerm_linux_virtual_machine" "vm01" {
     storage_account_type = var.os_disk.storage_account_type
     disk_size_gb         = var.os_disk.disk_size_gb
   }
-
 
   tags = var.tags
 }
