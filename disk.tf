@@ -18,7 +18,7 @@ resource "azurerm_virtual_machine_data_disk_attachment" "managed_disk_attach" {
     if disk.lun < 12
   }
   managed_disk_id    = azurerm_managed_disk.managed_disk[each.key].id
-  virtual_machine_id = var.os == "linux" ? azurerm_linux_virtual_machine.vm01[0].id : azurerm_windows_virtual_machine.example[0].id
+  virtual_machine_id = var.os == "linux" ? azurerm_linux_virtual_machine.vml[0].id : azurerm_windows_virtual_machine.vmw[0].id
   lun                = each.value["lun"]
   caching            = each.value["caching"]
 }
