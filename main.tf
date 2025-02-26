@@ -62,7 +62,12 @@ resource "azurerm_linux_virtual_machine" "vm01" {
     public_key = file("./${var.public_key_pub}")
   }
 
-
+  source_image_reference {
+    publisher = var.source_image.publisher
+    offer     = var.source_image.offer
+    sku       = var.source_image.sku
+    version   = var.source_image.version
+  }
 
   os_disk {
     caching              = var.os_disk.caching
