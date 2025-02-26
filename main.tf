@@ -92,7 +92,7 @@ resource "azurerm_windows_virtual_machine" "vmw" {
   availability_set_id = var.zones.create_availability_set ? azurerm_availability_set.aset_1[0].id : var.zones.configuration.availability_set_id
 
   network_interface_ids = [
-    azurerm_network_interface.example.id,
+    azurerm_network_interface.network_interface.id,
   ]
 
   source_image_reference {
