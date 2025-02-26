@@ -41,7 +41,7 @@ locals {
 # Instances
 ####################################################################
 ##############      vm01      ############## 
-resource "azurerm_linux_virtual_machine" "vm01" {
+resource "azurerm_linux_virtual_machine" "vml" {
   count               = var.os == "linux" ? 1 : 0
   name                = upper("LBAZ${var.proyecto_abre}${var.ambiente}${var.proposito}${var.correlativo_vm}") #Maximo 14 caracteres
   resource_group_name = var.resource_group
@@ -79,7 +79,7 @@ resource "azurerm_linux_virtual_machine" "vm01" {
   tags = var.tags
 }
 
-resource "azurerm_windows_virtual_machine" "example" {
+resource "azurerm_windows_virtual_machine" "vmw" {
   count = var.os == "windows" ? 1 : 0
 
   name                = upper("SBAZ${var.proyecto_abre}${var.ambiente}${var.proposito}${var.correlativo_vm}")
