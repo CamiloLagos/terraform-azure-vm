@@ -31,17 +31,17 @@ variable "disks" {
 
 variable "ambiente" {}
 variable "correlativo_vm" {
-    type = string
-    description = "Numero de 2 digitos consecutivos de acuerdo con la cantidad de servidores que posea un proyecto de acuerdo con su sistema operativo, proposito y ambiente"
+  type        = string
+  description = "Numero de 2 digitos consecutivos de acuerdo con la cantidad de servidores que posea un proyecto de acuerdo con su sistema operativo, proposito y ambiente"
 }
 variable "proyecto" {}
 variable "proyecto_abre" {
-    type = string
-    description = "Nombre de el proyecto abreviado de 3 a 5 caracteres maximo"
+  type        = string
+  description = "Nombre de el proyecto abreviado de 3 a 5 caracteres maximo"
 }
 variable "proposito" {
-    type = string
-    description = "Colocar el valor aceptado de acuerdo con la tabla de ambiente, consultar estandar de nombres de azure"
+  type        = string
+  description = "Colocar el valor aceptado de acuerdo con la tabla de ambiente, consultar estandar de nombres de azure"
 }
 
 ####################################################################
@@ -53,20 +53,20 @@ variable "size_vm" {
 }
 
 variable "create_interface_network" {
-  type = bool
+  type        = bool
   description = "Especificar en true o false si se deberia crear una interfaz de red"
-  default = true
+  default     = true
 }
 
 variable "subnet_id" {
-  type = any
+  type        = any
   description = "Ingresar el ID de la subnet a la cual se le creara una interfaz de red (Requerido si create_interface_network=true)"
-  default = null
+  default     = null
 }
 
 variable "interface_id" {
   description = "Ingresar el ID de la interfaz de red para la vm"
-  default = null
+  default     = null
 }
 
 variable "allow_extension" {
@@ -84,7 +84,7 @@ variable "admin_username" {
 variable "public_key_pub" {
   type        = string
   description = "El nombre de la llave pública que se utilizará para permitir el acceso a la máquina virtual a través de SSH. Asegúrese de proporcionar el nombre correcto de la llave pública que corresponde a la clave privada autorizada para acceder a la VM."
-  sensitive = true
+  sensitive   = true
 }
 
 
@@ -108,13 +108,13 @@ variable "source_image" {
 variable "os_disk" {
   description = "Configuración de los discos del sistema operativo de la máquina virtual."
   type = object({
-    caching             = string
+    caching              = string
     storage_account_type = string
-    disk_size_gb        = number
+    disk_size_gb         = number
   })
   default = {
-    caching             = "ReadWrite"
-    disk_size_gb        = 512
+    caching              = "ReadWrite"
+    disk_size_gb         = 512
     storage_account_type = "Premium_LRS"
   }
 }
@@ -123,7 +123,7 @@ variable "zones" {
   type = object({
     create_availability_set = bool
     configuration = object({
-      zone = number
+      zone                = number
       availability_set_id = any
     })
   })
@@ -131,43 +131,43 @@ variable "zones" {
   default = {
     configuration = {
       availability_set_id = null
-      zone = null
+      zone                = null
     }
     create_availability_set = true
   }
 
   validation {
-    condition = var.zones.create_availability_set == true ? var.zones.configuration.zone == null && var.zones.configuration.availability_set_id == null : var.zones.configuration.zone != null ? var.zones.configuration.availability_set_id == null : var.zones.configuration.availability_set_id != null
-    error_message = "Si se va a crear un conjunto de disponibilidad (create_availability_set is true), las variables zone y availability_set deben ser nulas." 
+    condition     = var.zones.create_availability_set == true ? var.zones.configuration.zone == null && var.zones.configuration.availability_set_id == null : var.zones.configuration.zone != null ? var.zones.configuration.availability_set_id == null : var.zones.configuration.availability_set_id != null
+    error_message = "Si se va a crear un conjunto de disponibilidad (create_availability_set is true), las variables zone y availability_set deben ser nulas."
   }
 }
 
 variable "disable_password_authentication" {
-  type = bool
+  type        = bool
   description = "Deshabilitar la autenticación por contraseña."
-  default = true
+  default     = true
 }
 
 variable "admin_password" {
-  type = string
+  type        = string
   description = "La contraseña del administrador para la máquina virtual. Esta contraseña se utilizará para acceder y administrar la máquina virtual mediante RDP. Asegúrese de proporcionar una contraseña segura y fácil de recordar."
-  sensitive = true
+  sensitive   = true
 }
 
 variable "os" {
-  type = string
+  type        = string
   description = "El sistema operativo que se utilizará para la máquina virtual. Los valores válidos son 'Linux' o 'Windows'."
   validation {
-    condition = var.os == "Linux" || var.os == "Windows"
+    condition     = var.os == "Linux" || var.os == "Windows"
     error_message = "El sistema operativo debe ser 'Linux' o 'Windows'."
   }
 }
 
 
 variable "enable_ip_forwarding" {
-  type = bool
+  type        = bool
   description = "Habilitar el reenvío de IP. Establecer esto en 'true' permite que el Sistema Operativo actue como enrutador"
-  default = false
+  default     = false
 }
 
 

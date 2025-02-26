@@ -3,7 +3,7 @@
 ####################################################################
 
 resource "azurerm_network_interface" "network_interface" {
-  count = var.create_interface_network ? 1 : 0
+  count               = var.create_interface_network ? 1 : 0
   name                = "NIC-${var.correlativo_vm}-${var.proyecto}-${var.ambiente}"
   location            = var.location
   resource_group_name = var.resource_group
@@ -24,7 +24,7 @@ resource "azurerm_network_interface" "network_interface" {
 
 
 resource "azurerm_availability_set" "aset_1" {
-  count = var.zones.create_availability_set ? 1 : 0
+  count               = var.zones.create_availability_set ? 1 : 0
   name                = "${var.proyecto}_aset1"
   location            = var.location
   resource_group_name = var.resource_group
@@ -42,20 +42,20 @@ locals {
 ####################################################################
 ##############      vm01      ############## 
 resource "azurerm_linux_virtual_machine" "vm01" {
-  count = var.os == "linux" ? 1 : 0
-  name                  = upper("LBAZ${var.proyecto_abre}${var.ambiente}${var.proposito}${var.correlativo_vm}") #Maximo 14 caracteres
-  resource_group_name   = var.resource_group
-  location              = var.location 
-  availability_set_id   = var.zones.create_availability_set ? azurerm_availability_set.aset_1[0].id  : var.zones.configuration.availability_set_id #Comentado por la habilitacion de las zonas de disponibilidad
-  size                  = var.size_vm
+  count               = var.os == "linux" ? 1 : 0
+  name                = upper("LBAZ${var.proyecto_abre}${var.ambiente}${var.proposito}${var.correlativo_vm}") #Maximo 14 caracteres
+  resource_group_name = var.resource_group
+  location            = var.location
+  availability_set_id = var.zones.create_availability_set ? azurerm_availability_set.aset_1[0].id : var.zones.configuration.availability_set_id #Comentado por la habilitacion de las zonas de disponibilidad
+  size                = var.size_vm
 
-  admin_username        = var.admin_username
+  admin_username                  = var.admin_username
   disable_password_authentication = var.disable_password_authentication
 
   allow_extension_operations = var.allow_extension
-  zone = var.zones.configuration.zone
+  zone                       = var.zones.configuration.zone
 
-  network_interface_ids = [ var.create_interface_network ? azurerm_network_interface.network_interface[0].id : var.interface_id ]
+  network_interface_ids = [var.create_interface_network ? azurerm_network_interface.network_interface[0].id : var.interface_id]
 
   admin_ssh_key {
     username   = var.admin_username
@@ -80,7 +80,7 @@ resource "azurerm_linux_virtual_machine" "vm01" {
 }
 
 resource "azurerm_windows_virtual_machine" "example" {
-  count               = var.os == "windows" ? 1 : 0
+  count = var.os == "windows" ? 1 : 0
 
   name                = upper("SBAZ${var.proyecto_abre}${var.ambiente}${var.proposito}${var.correlativo_vm}")
   resource_group_name = var.resource_group
@@ -89,7 +89,7 @@ resource "azurerm_windows_virtual_machine" "example" {
   admin_username      = var.admin_username
   admin_password      = var.admin_password
 
-  availability_set_id = var.zones.create_availability_set ? azurerm_availability_set.aset_1[0].id  : var.zones.configuration.availability_set_id
+  availability_set_id = var.zones.create_availability_set ? azurerm_availability_set.aset_1[0].id : var.zones.configuration.availability_set_id
 
   network_interface_ids = [
     azurerm_network_interface.example.id,
