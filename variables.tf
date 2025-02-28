@@ -158,7 +158,7 @@ variable "os" {
   type        = string
   description = "El sistema operativo que se utilizará para la máquina virtual. Los valores válidos son 'Linux' o 'Windows'."
   validation {
-    condition     = var.os == "Linux" || var.os == "Windows"
+    condition     = var.os == "linux" || var.os == "windows"
     error_message = "El sistema operativo debe ser 'Linux' o 'Windows'."
   }
 }
