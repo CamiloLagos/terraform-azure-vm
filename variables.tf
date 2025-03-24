@@ -204,3 +204,8 @@ variable "key_id" {
   description = "El ID de la clave de cifrado que se utilizará para cifrar los discos de la máquina virtual."
 }
 
+variable "key_vault_id" {
+  type        = string
+  description = "El ID del almacén de claves que se utilizará para cifrar los discos de la máquina virtual."
+}
+

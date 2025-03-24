@@ -1,3 +1,5 @@
+data "azurerm_client_config" "current" {}
+
 ####################################################################
 # Network Interface 
 ####################################################################
@@ -43,6 +45,19 @@ resource "azurerm_disk_encryption_set" "disk_e_s" {
   }
   tags = local.merged_tags
 }
+
+resource "azurerm_key_vault_access_policy" "des_access" {
+  key_vault_id = var.key_vault_id
+  object_id    = azurerm_disk_encryption_set.disk_e_s.identity[0].principal_id
+  tenant_id = data.azurerm_client_config.current.tenant_id
+
+  key_permissions = [
+    "Get",
+    "WrapKey",
+    "UnwrapKey"
+  ]
+}
+
 
 
 ####################################################################
