@@ -4,7 +4,7 @@
 
 resource "azurerm_network_interface" "network_interface" {
   count               = var.create_interface_network ? 1 : 0
-  name                = "NIC-${var.correlativo_vm}-${var.proyecto}-${var.ambiente}"
+  name                = "NIC-${var.correlativo_vm}-${var.project}-${var.environment}"
   location            = var.location
   resource_group_name = var.resource_group
 
@@ -15,7 +15,7 @@ resource "azurerm_network_interface" "network_interface" {
     subnet_id                     = var.subnet_id
     private_ip_address_allocation = "Dynamic"
   }
-  tags = var.tags
+  tags = local.merged_tags
 }
 
 ####################################################################
@@ -25,26 +25,23 @@ resource "azurerm_network_interface" "network_interface" {
 
 resource "azurerm_availability_set" "aset_1" {
   count               = var.zones.create_availability_set ? 1 : 0
-  name                = "${var.proyecto}_aset1"
+  name                = "${var.project}_aset1"
   location            = var.location
   resource_group_name = var.resource_group
 
-  tags = var.tags
+  tags = local.merged_tags
 }
 
-locals {
-
-}
 resource "azurerm_disk_encryption_set" "disk_e_s" {
   resource_group_name = var.resource_group
   location            = var.location
-  name                = "DES-${var.correlativo_vm}-${var.proyecto}-${var.ambiente}"
+  name                = "DES-${var.correlativo_vm}-${var.project}-${var.environment}"
 
 
   identity {
     type = "SystemAssigned"
   }
-  tags = var.tags
+  tags = local.merged_tags
 }
 
 
@@ -54,7 +51,7 @@ resource "azurerm_disk_encryption_set" "disk_e_s" {
 ##############      vm01      ############## 
 resource "azurerm_linux_virtual_machine" "vml" {
   count               = var.os == "linux" ? 1 : 0
-  name                = upper("LBAZ${var.proyecto_abre}${var.ambiente}${var.proposito}${var.correlativo_vm}") #Maximo 14 caracteres
+  name                = upper("LBAZ${var.project_abre}${var.environment}${var.proposito}${var.correlativo_vm}") #Maximo 14 caracteres
   resource_group_name = var.resource_group
   location            = var.location
   availability_set_id = var.zones.create_availability_set ? azurerm_availability_set.aset_1[0].id : var.zones.configuration.availability_set_id #Comentado por la habilitacion de las zonas de disponibilidad
@@ -88,13 +85,13 @@ resource "azurerm_linux_virtual_machine" "vml" {
   }
 
 
-  tags = var.tags
+  tags = local.merged_tags
 }
 
 resource "azurerm_windows_virtual_machine" "vmw" {
   count = var.os == "windows" ? 1 : 0
 
-  name                = upper("SBAZ${var.proyecto_abre}${var.ambiente}${var.proposito}${var.correlativo_vm}")
+  name                = upper("SBAZ${var.project_abre}${var.environment}${var.proposito}${var.correlativo_vm}")
   resource_group_name = var.resource_group
   location            = var.location
   size                = var.size_vm
@@ -121,6 +118,6 @@ resource "azurerm_windows_virtual_machine" "vmw" {
     disk_encryption_set_id = azurerm_disk_encryption_set.disk_e_s.id
   }
 
-  tags = var.tags
+  tags = local.merged_tags
 }
 

@@ -1,4 +1,3 @@
-variable "tags" {}
 variable "resource_group" {}
 variable "location" {}
 variable "disks" {
@@ -14,28 +13,58 @@ variable "disks" {
   }
 }
 
-# variable "disks_custom" {
-#   type = map(object({
-#     name          = string
-#     storage_type  = string
-#     caching       = string
-#     create_option = string
-#     size          = number
-#     lun           = number
-#   }))
-# }
+variable "additional_tags" {
+  description = "A mapping of tags to assign to the resource."
+  type        = map(string)
+  default     = {}
+}
 
+####################################################################
+# Tagging Vars
+####################################################################
+variable "application_code" {
+  description = "The application code."
+  type        = string
+}
+variable "project_owner" {
+  description = "The project owner."
+  type        = string
+}
+variable "project_name" {
+  description = "The project name."
+  type        = string
+}
+variable "cost_center" {
+  description = "The cost center."
+  type        = string
+}
+variable "requested_by" {
+  description = "The person who requested the resource."
+  type        = string
+}
+variable "di" {
+  description = "Demanda Interna."
+  type        = string
+}
+variable "ev" {
+  description = "The Easy Vista."
+  type        = string
+}
+variable "creation_date" {
+  description = "The creation date of the resource."
+  type        = string
+}
 ####################################################################
 # Name Vars
 ####################################################################
 
-variable "ambiente" {}
+variable "environment" {}
 variable "correlativo_vm" {
   type        = string
   description = "Numero de 2 digitos consecutivos de acuerdo con la cantidad de servidores que posea un proyecto de acuerdo con su sistema operativo, proposito y ambiente"
 }
-variable "proyecto" {}
-variable "proyecto_abre" {
+variable "project" {}
+variable "project_abre" {
   type        = string
   description = "Nombre de el proyecto abreviado de 3 a 5 caracteres maximo"
 }

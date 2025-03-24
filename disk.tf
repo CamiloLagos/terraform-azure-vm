@@ -1,13 +1,13 @@
 resource "azurerm_managed_disk" "managed_disk" {
   for_each = var.disks
 
-  name                 = upper("LBAZ${var.proyecto_abre}${var.ambiente}${var.proposito}${var.correlativo_vm}-data${each.key}")
+  name                 = upper("LBAZ${var.project_abre}${var.environment}${var.proposito}${var.correlativo_vm}-data${each.key}")
   location             = var.location
   resource_group_name  = var.resource_group
   storage_account_type = each.value["storage_type"]
   create_option        = each.value["create_option"]
   disk_size_gb         = each.value["size"]
-  tags                 = var.tags
+  tags                 = local.merged_tags
   disk_encryption_set_id = azurerm_disk_encryption_set.disk_e_s.id
 
   zone = 2
