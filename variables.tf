@@ -199,4 +199,8 @@ variable "enable_ip_forwarding" {
   default     = false
 }
 
+variable "key_id" {
+  type        = string
+  description = "El ID de la clave de cifrado que se utilizará para cifrar los discos de la máquina virtual."
+}
 
