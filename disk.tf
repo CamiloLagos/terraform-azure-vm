@@ -8,7 +8,7 @@ resource "azurerm_managed_disk" "managed_disk" {
   create_option        = each.value["create_option"]
   disk_size_gb         = each.value["size"]
   tags                 = local.merged_tags
-  disk_encryption_set_id = azurerm_disk_encryption_set.disk_e_s.id
+  #disk_encryption_set_id = azurerm_disk_encryption_set.disk_e_s.id
 
   zone = 2
 }
