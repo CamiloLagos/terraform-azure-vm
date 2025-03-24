@@ -35,6 +35,17 @@ resource "azurerm_availability_set" "aset_1" {
 locals {
 
 }
+resource "azurerm_disk_encryption_set" "disk_e_s" {
+  resource_group_name = var.resource_group
+  location            = var.location
+  name                = "DES-${var.correlativo_vm}-${var.proyecto}-${var.ambiente}"
+
+
+  identity {
+    type = "SystemAssigned"
+  }
+  tags = var.tags
+}
 
 
 ####################################################################
@@ -70,9 +81,10 @@ resource "azurerm_linux_virtual_machine" "vml" {
   }
 
   os_disk {
-    caching              = var.os_disk.caching
-    storage_account_type = var.os_disk.storage_account_type
-    disk_size_gb         = var.os_disk.disk_size_gb
+    caching                = var.os_disk.caching
+    storage_account_type   = var.os_disk.storage_account_type
+    disk_size_gb           = var.os_disk.disk_size_gb
+    disk_encryption_set_id = azurerm_disk_encryption_set.disk_e_s.id
   }
 
 
@@ -106,6 +118,7 @@ resource "azurerm_windows_virtual_machine" "vmw" {
     caching              = var.os_disk.caching
     storage_account_type = var.os_disk.storage_account_type
     disk_size_gb         = var.os_disk.disk_size_gb
+    disk_encryption_set_id = azurerm_disk_encryption_set.disk_e_s.id
   }
 
   tags = var.tags
