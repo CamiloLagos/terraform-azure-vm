@@ -7,10 +7,9 @@ resource "azurerm_managed_disk" "managed_disk" {
   storage_account_type = each.value["storage_type"]
   create_option        = each.value["create_option"]
   disk_size_gb         = each.value["size"]
+  
   tags                 = local.merged_tags
   disk_encryption_set_id = azurerm_disk_encryption_set.disk_e_s.id
-
-  zone = 2
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "managed_disk_attach" {
