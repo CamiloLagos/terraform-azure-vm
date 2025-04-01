@@ -199,13 +199,9 @@ variable "enable_ip_forwarding" {
   default     = false
 }
 
-variable "key_id" {
+variable "disk_encryption_set_id" {
   type        = string
-  description = "El ID de la clave de cifrado que se utilizará para cifrar los discos de la máquina virtual."
-}
-
-variable "key_vault_id" {
-  type        = string
-  description = "El ID del almacén de claves que se utilizará para cifrar los discos de la máquina virtual."
+  description = "ID del conjunto de cifrado de disco. Este ID se utiliza para cifrar los discos de la máquina virtual y proteger los datos almacenados en ellos."
+  default     = null
 }
 

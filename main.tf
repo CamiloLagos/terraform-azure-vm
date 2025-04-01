@@ -34,32 +34,6 @@ resource "azurerm_availability_set" "aset_1" {
   tags = local.merged_tags
 }
 
-resource "azurerm_disk_encryption_set" "disk_e_s" {
-  resource_group_name = var.resource_group
-  location            = var.location
-  name                = "DES-${var.correlativo_vm}-${var.project}-${var.environment}"
-  key_vault_key_id = var.key_id
-
-  identity {
-    type = "SystemAssigned"
-  }
-  tags = local.merged_tags
-}
-
-resource "azurerm_key_vault_access_policy" "des_access" {
-  key_vault_id = var.key_vault_id
-  object_id    = azurerm_disk_encryption_set.disk_e_s.identity[0].principal_id
-  tenant_id = data.azurerm_client_config.current.tenant_id
-
-  key_permissions = [
-    "Get",
-    "WrapKey",
-    "UnwrapKey"
-  ]
-}
-
-
-
 ####################################################################
 # Instances
 ####################################################################
@@ -96,7 +70,7 @@ resource "azurerm_linux_virtual_machine" "vml" {
     caching                = var.os_disk.caching
     storage_account_type   = var.os_disk.storage_account_type
     disk_size_gb           = var.os_disk.disk_size_gb
-    disk_encryption_set_id = azurerm_disk_encryption_set.disk_e_s.id
+    disk_encryption_set_id = var.disk_encryption_set_id
   }
 
 
@@ -130,7 +104,7 @@ resource "azurerm_windows_virtual_machine" "vmw" {
     caching              = var.os_disk.caching
     storage_account_type = var.os_disk.storage_account_type
     disk_size_gb         = var.os_disk.disk_size_gb
-    disk_encryption_set_id = azurerm_disk_encryption_set.disk_e_s.id
+    disk_encryption_set_id = var.disk_encryption_set_id
   }
 
   tags = local.merged_tags
