@@ -9,7 +9,7 @@ locals {
     "BAES:COST-CENTER"      = upper(var.cost_center)
     "BAES:REQUESTED-BY"     = upper(var.requested_by)
     "BAES:PROVIDED-BY"      = "JUAN CARLOS ZELAYA jzelaya@bancoagricola.com.sv"
-    "BAES:DI-O-DE"          = upper(var.di)
+    "BAES:DI_O_DE"          = upper(var.di)
     "BAES:EV"               = upper(var.ev)
     "BAES:CREATION-DATE"    = upper(var.creation_date)
   }
